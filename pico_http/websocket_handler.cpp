@@ -148,7 +148,7 @@ bool WebSocketHandler::encodeData(const uint8_t* data, size_t len, WebSocketInte
 
     // FIN + operation
     buffer[0] = 0x80 | WebSocketOperation::BINARY_FRAME;
-    buffer[1] |= 0x80;
+    //buffer[1] |= 0x80;
     
     if (len < 126)
     {
@@ -177,7 +177,7 @@ bool WebSocketHandler::encodeData(const uint8_t* data, size_t len, WebSocketInte
     }
 
     // Empty mask for now
-    headerSize+=4;
+    //headerSize+=4;
     
     // 4 mask bytes if needed
     if (!callback->onWebsocketEncodedData(&buffer[0], headerSize))
