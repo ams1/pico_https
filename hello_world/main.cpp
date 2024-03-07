@@ -32,7 +32,14 @@ SOFTWARE.
 #include "wifi.h"
 #include "pico_logger.h"
 
+#include "bsp/board.h"
+#include "tusb.h"
+#include "pico_usb.h"
+
 int main() {
+    board_init();
+    tusb_init();
+    
     stdio_init_all();
 
     if (cyw43_arch_init()) {
@@ -67,6 +74,8 @@ int main() {
     uint32_t start = to_us_since_boot(get_absolute_time())/1000;
     while (true) {
         cyw43_arch_poll();
+        tud_task();
+        pico_usb_update();
 
         uint32_t now = to_us_since_boot(get_absolute_time())/1000;
         if (now - start > 5000)

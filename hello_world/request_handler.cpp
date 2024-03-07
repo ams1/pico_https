@@ -28,8 +28,10 @@ SOFTWARE.
 
 #include "request_handler.h"
 #include "pico_logger.h"
+#include "pico_usb.h"
 
 #include "rc/index.html.hex.h"
+
 
 const unsigned int HTTP_BODY_LEN = _source_hello_world_rc_index_html_len;
 const u8_t *HTTP_BODY = &_source_hello_world_rc_index_html[0];
@@ -75,6 +77,23 @@ bool RequestHandler::onWebSocketData(u8_t *data, size_t len)
 {
     trace("RequestHandler::onWebSocketData: this=%p, data[%.*s]:\n", this, len, data);
 
+    if (len <= 4) {
+        return true;
+    }
+
+    if ((data[0] == 'k') && (data[1] == ' '))
+    {
+        char keyCode = data[2];
+        uint32_t duration = 0;
+        
+        for (size_t i=4; (i<len) && (data[i] >= '0' && data[i] <= '9');++i)
+        {
+            duration = (duration * 10) + data[i] - '0';
+        }
+
+        send_keyboard_report(keyCode, duration);
+    }
+    
     sendWebSocketData(data, len);
     return true;
 }

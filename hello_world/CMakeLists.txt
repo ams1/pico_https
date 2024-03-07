@@ -36,10 +36,15 @@ target_link_libraries(hello_world_https
         pico_http
         pico_tls
         pico_logger
+        pico_usb
+        pico_unique_id
+        tinyusb_device
+        tinyusb_board
         )
+
 pico_add_extra_outputs(hello_world_https)
 
-pico_enable_stdio_usb(hello_world_https 1)
+pico_enable_stdio_usb(hello_world_https 0)
 pico_enable_stdio_uart(hello_world_https 0)
 
 target_include_directories(hello_world_https PUBLIC config)
